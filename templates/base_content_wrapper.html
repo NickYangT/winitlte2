@@ -1,0 +1,139 @@
+{% load staticfiles %}
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        HOME
+        <small>次级目录</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">second</a></li>
+        <li class="active">third</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">单元测试</h3>
+
+              <div class="box-tools pull-right">
+                <div class="has-feedback">
+                  <input type="text" class="form-control input-sm" placeholder="接口名">
+                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                </div>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="mailbox-controls">
+                <!-- Check all button -->
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm" onclick="delcfm()"><i class="fa fa-trash-o"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                </div>
+                <!-- /.btn-group -->
+                <button type="button" class="btn btn-default btn-sm" href="{% url 'unittest' %}" onclick="refresh()"><i class="fa fa-refresh"></i></button>
+                 <script>
+                       function refresh() {
+                           if(onClick()){
+                               window.event.returnValue = true;
+                           }
+                       }
+                 </script>
+                <div class="pull-right">
+                  1-50/200
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                  </div>
+                  <!-- /.btn-group -->
+                </div>
+                <!-- /.pull-right -->
+              </div>
+              <div class="table-responsive mailbox-messages">
+                <table class="table table-hover table-striped">
+                  <tbody>
+                  <tr>
+                    <td><strong>操作</strong></td>
+                    <td class="mailbox-no"><b>编号</b></td>
+                    <td class="mailbox-name"><b>接口名</b></td>
+                    <td class="mailbox-subject"><b>说明</b></td>
+                    <td class="mailbox-date"><b>创建时间</b></td>
+                    <td class="mailbox-str"><b>操作</b></td>
+                  </tr>
+                  {% for page_item_content in page_data.object_list %}
+                      <tr>
+                        <td><input type="checkbox"></td>
+                        <td class="mailbox-str">{{ page_item_content.id }}</td>
+                        <td class="mailbox-name"><a href="?item={{ page_item_content.id }}">{{ page_item_content.methodName }}</a></td>
+                        <td class="mailbox-subject"><b>{{ page_item_content.description }}</b></td>
+                        <td class="mailbox-date">{{ page_item_content.createdtime }}</td>
+                        <td class="mailbox-str">
+                            <!--edit button-->
+                            <a href="#" onclick=""><i class="fa fa-edit"></i></a>
+                            <!--delete button-->
+                            <a href="{% url 'unittest'  %}" onclick="delcfm()" style="color: red"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                      </tr>
+                  {% endfor %}
+                  <!--delete test data script-->
+                  <script type="application/javascript">
+                        function delcfm() {
+                             if(!confirm('确认要删除这条测试数据？')) {
+                                 window.event.returnValue = false;
+                             }
+                        }
+                  </script>
+                   <!--end delete test data script-->
+                  </tbody>
+                </table>
+                <!-- /.table -->
+              </div>
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.box-body -->
+            <div class="row"  style="float:right">
+                <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                    <ul class="pagination">
+                    {% if page_data.has_previous  %}
+                        <li class="paginate_button previous " id="example1_previous">
+                                <a href="?{{ page_data.previous_page_number.querystring }}" aria-controls="example1" data-dt-idx="0" tabindex="0">上一页</a>
+                        </li>
+                    {% endif %}
+                    {% for page in page_data.pages %}
+                            {% if page < 10%}
+                                {% ifequal page page_data.number  %}
+                                    <li class="paginate_button active">
+                                        <a href="?{{ page.querystring }}/2" aria-controls="example1" data-dt-idx="1" tabindex="0">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="paginate_button ">
+                                        <a href="?{{ page.querystring }}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{ page }}</a>
+                                    </li>
+                                {% endifequal %}
+                            {% else %}
+                                <li class="paginate_button ">
+                                    <a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0">......</a>
+                                </li>
+                            {% endif %}
+                    {% endfor %}
+                    {% if page_data.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?{{ page_data.next_page_number.querystring }}" aria-controls="example1" data-dt-idx="7" tabindex="0">下一页</a>
+                            </li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+            </div>
+
+    </section>
+  </div>
